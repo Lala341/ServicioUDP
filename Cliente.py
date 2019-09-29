@@ -8,12 +8,18 @@ Created on Tue Sep 24 07:16:39 2019
 
 import socket
 import sys
- 
-# Creando un socket TCP/IP
-
 import git
+import datetime
+import hashlib
+
+
 #Local repo on your computer
 repoLocal = git.Repo( '/' )
+x = datetime.datetime.now()
+nameFile="/Cliente/"+x+".txt"
+f= open(nameFile,"w+")
+
+hasher = hashlib.md5()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
  
@@ -21,25 +27,74 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 12000)
 print (sys.stderr, 'conectando a %s puerto %s' % server_address)
 sock.connect(server_address)
-
+x = datetime.datetime.now()
+f.write(x+"-Cliente conectado puerto")
+men1="INICIOENVIO"
+num=0
+hashfileserver=""
+datacontent=""
 try:
      
     # Enviando datos
-    message = 'Este es el mensaje.  Se repitio.'
+
+    message = 'LISTO'
     print (sys.stderr, 'enviando "%s"' % message)
     sock.sendall(message)
- 
-    # Buscando respuesta
-    amount_received = 0
-    amount_expected = len(message)
-     
-    while amount_received < amount_expected:
-        data = sock.recv(19)
-        amount_received += len(data)
-        print (sys.stderr, 'recibiendo "%s"' % data)
- 
+    x = datetime.datetime.now()
+    f.write(x+"-Enviado LISTO")
+    
+    
+    while True:
+        data = sock.recv(11)
+        if ("INICIOENVIO-" in data):
+            
+            num= sock.recv(3)
+            x = datetime.datetime.now()
+            f.write(x+"-Inicio Envio"+num)
+            print ('Recibiendo "%s"' % data)
+            break
+            
+    
+    i=0
+    while i<num:
+        print('receiving data...')
+        data = s.recv(1024)
+        print('data=%s', (data))
+        x = datetime.datetime.now()
+        f.write(x+"-Receiving data-Paquete "+i+" de "+num)
+        datacontent=data
+        hasher.update(data)
+        i=i+1
+    
+    x = datetime.datetime.now()
+    f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B ")
+        
+    while True:
+        data = sock.recv(4)
+        if ("HASH" in data):
+            
+            hashfileserver= sock.recv(1024)
+            x = datetime.datetime.now()
+            f.write(x+"-Recibe hash de servidor : "+hashfileserver)
+            print ('Recibiendo "%s"' % data)
+            break
 finally:
+    hashfile=hasher.hexdigest()
+    x = datetime.datetime.now()
+    f.write(x+"-Este es el hash calculado por el cliente: "+hashfile)
+    
+    if(hashfile==hashfileserver):
+        x = datetime.datetime.now()
+        f.write(x+"-Se recibio correctamente el archivo.")
+    else:
+        x = datetime.datetime.now()
+        f.write(x+"-No se recibio correctamente el archivo.")
     print(sys.stderr, 'cerrando socket')
     sock.close()
+    x = datetime.datetime.now()
+    f.write(x+"-Socket cerrado")
+    f.close() 
     repo.git.add(".")
-    repo.git.commit(m='Adding cambios via python')
+    repo.git.commit(m='Adding logs via python')
+    origin = repo.remote('origin')
+    origin.push()
