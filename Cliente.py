@@ -14,9 +14,9 @@ import hashlib
 
 
 #Local repo on your computer
-repoLocal = git.Repo( '/' )
-x = datetime.datetime.now()
-nameFile="/Cliente/Logs/"+x+".txt"
+repoLocal = git.Repo( './' )
+x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
+nameFile="./Cliente/Logs/"+x+".txt"
 f= open(nameFile,"w+")
 
 
@@ -28,7 +28,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 12000)
 print (sys.stderr, 'conectando a %s puerto %s' % server_address)
 sock.connect(server_address)
-x = datetime.datetime.now()
+x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
 f.write(x+"-Cliente conectado puerto")
 men1="INICIOENVIO"
 num=0
@@ -41,11 +41,11 @@ try:
     message = 'LISTO'
     print (sys.stderr, 'enviando "%s"' % message)
     sock.sendall(message)
-    x = datetime.datetime.now()
+    x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Enviado LISTO")
     nom= sock.recv(10)
     
-    nameFilear="/Cliente/Archivos/"+x+"-"+nom
+    nameFilear="./Cliente/Archivos/"+x+"-"+nom
     far= open(nameFilear,"w+")
     
     while True:
@@ -54,7 +54,7 @@ try:
             
             num= sock.recv(7)
             num=int(num)
-            x = datetime.datetime.now()
+            x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
             f.write(x+"-Inicio Envio"+num)
             print ('Recibiendo "%s"' % data)
             break
@@ -69,13 +69,13 @@ try:
         data = s.recv(m)
         far.write(data)
         print('data=%s', (data))
-        x = datetime.datetime.now()
+        x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
         f.write(x+"-Receiving data-Paquete "+i+" de "+num)
         datacontent=data
         hasher.update(data)
         j=j- 1024
     
-    x = datetime.datetime.now()
+    x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B ")
         
     while True:
@@ -83,28 +83,29 @@ try:
         if ("HASH" in data):
             
             hashfileserver= sock.recv(1024)
-            x = datetime.datetime.now()
+            x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
             f.write(x+"-Recibe hash de servidor : "+hashfileserver)
             print ('Recibiendo "%s"' % data)
             break
 finally:
     hashfile=hasher.hexdigest()
-    x = datetime.datetime.now()
+    x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Este es el hash calculado por el cliente: "+hashfile)
     
     if(hashfile==hashfileserver):
-        x = datetime.datetime.now()
+        x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
         f.write(x+"-Se recibio correctamente el archivo.")
     else:
-        x = datetime.datetime.now()
+        x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
         f.write(x+"-No se recibio correctamente el archivo.")
     print(sys.stderr, 'cerrando socket')
     sock.close()
-    x = datetime.datetime.now()
+    x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Socket cerrado")
     far.close()
     f.close()
     repo.git.add(".")
     repo.git.commit(m='Adding logs via python')
     origin = repo.remote('origin')
+    origin.pull()
     origin.push()
