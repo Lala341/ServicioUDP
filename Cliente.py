@@ -16,8 +16,9 @@ import hashlib
 #Local repo on your computer
 repoLocal = git.Repo( '/' )
 x = datetime.datetime.now()
-nameFile="/Cliente/"+x+".txt"
+nameFile="/Cliente/Logs/"+x+".txt"
 f= open(nameFile,"w+")
+
 
 hasher = hashlib.md5()
 
@@ -42,7 +43,10 @@ try:
     sock.sendall(message)
     x = datetime.datetime.now()
     f.write(x+"-Enviado LISTO")
+    nom= sock.recv(10)
     
+    nameFilear="/Cliente/Archivos/"+x+"-"+nom
+    far= open(nameFilear,"w+")
     
     while True:
         data = sock.recv(11)
@@ -63,6 +67,7 @@ try:
         if(j<1024):
             m=j
         data = s.recv(m)
+        far.write(data)
         print('data=%s', (data))
         x = datetime.datetime.now()
         f.write(x+"-Receiving data-Paquete "+i+" de "+num)
@@ -97,7 +102,8 @@ finally:
     sock.close()
     x = datetime.datetime.now()
     f.write(x+"-Socket cerrado")
-    f.close() 
+    far.close()
+    f.close()
     repo.git.add(".")
     repo.git.commit(m='Adding logs via python')
     origin = repo.remote('origin')
