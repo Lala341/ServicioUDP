@@ -49,6 +49,7 @@ try:
         if ("INICIOENVIO-" in data):
             
             num= sock.recv(3)
+            num=int(num)
             x = datetime.datetime.now()
             f.write(x+"-Inicio Envio"+num)
             print ('Recibiendo "%s"' % data)
