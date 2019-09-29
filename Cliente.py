@@ -48,24 +48,27 @@ try:
         data = sock.recv(11)
         if ("INICIOENVIO-" in data):
             
-            num= sock.recv(3)
+            num= sock.recv(7)
             num=int(num)
             x = datetime.datetime.now()
             f.write(x+"-Inicio Envio"+num)
             print ('Recibiendo "%s"' % data)
             break
             
+    j=num
+    m=1024
     
-    i=0
-    while i<num:
+    while 0<j:
         print('receiving data...')
-        data = s.recv(1024)
+        if(j<1024):
+            m=j
+        data = s.recv(m)
         print('data=%s', (data))
         x = datetime.datetime.now()
         f.write(x+"-Receiving data-Paquete "+i+" de "+num)
         datacontent=data
         hasher.update(data)
-        i=i+1
+        j=j- 1024
     
     x = datetime.datetime.now()
     f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B ")
