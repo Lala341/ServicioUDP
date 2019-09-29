@@ -77,7 +77,8 @@ try:
     
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B ")
-        
+    far.close()
+     
     while True:
         data = sock.recv(4)
         if ("HASH" in data):
@@ -102,7 +103,6 @@ finally:
     sock.close()
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Socket cerrado")
-    far.close()
     f.close()
     repo.git.add(".")
     repo.git.commit(m='Adding logs via python')
