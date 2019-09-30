@@ -49,11 +49,13 @@ try:
     far= open(nameFilear,"w+")
     
     while True:
-        data = sock.recv(11)
+        data = sock.recv(12)
         datadec=data.decode()
         if ("INICIOENVIO-" in datadec):
-            num= sock.recv(7)
-            num=int(num.decode())
+            num= sock.recv(7).decode()
+            print ('Recibiendo ' +num)
+            
+            num=int(num)
             x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
             f.write(x+"-Inicio Envio"+num)
             print ('Recibiendo "%s"' % data)
