@@ -16,7 +16,7 @@ import hashlib
 #Local repo on your computer
 repo = git.Repo( './' )
 x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
-nameFile="./Cliente/Logs/"+x+".txt"
+nameFile="./Cliente/Logs/"+x.microsecond+"--"+x+".txt"
 f= open(nameFile,"w+")
 
 
@@ -43,9 +43,11 @@ try:
     sock.sendall(message)
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Enviado LISTO")
-    nom= sock.recv(10)
-    
-    nameFilear="./Cliente/Archivos/"+x+"-"+nom
+    temp= sock.recv(15)
+    temp2=temp.split("-")
+    nom=temp2[0]
+    idc=temp2[1]
+    nameFilear="./Cliente/Archivos/Cliente"+idc+"--"+x+"-"+nom
     far= open(nameFilear,"w+")
     
     while True:
