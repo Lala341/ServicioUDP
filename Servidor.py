@@ -4,6 +4,14 @@
 import socket, threading
 import os
 import hashlib
+import git
+import datetime
+
+#Local repo on your computer
+repo = git.Repo( './' )
+x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
+nameFile="./Servidor/Logs/"+"C-"+x+".txt"
+f= open(nameFile,"w+")
 
 print ('¿Qué archivo quiere transferir?')
 print ('1. Foto 100MB')
@@ -34,14 +42,13 @@ class ClientThread(threading.Thread):
         self.port = port
         self.socket = socket
         print ("[+] New thread started for "+ip+":"+str(port))
-
+        f.write(x+"-Cliente conectado puerto: "+str(port)+' Con ip: '+ip+' Con ID: '+str(cliente))
 
     def run(self):    
-        print ("Connection from : "+ip+":"+str(port)+str(cliente))
+        print ("Connection from : "+ip+":"+str(port)+' '+str(cliente))
         sizefile = os.stat(nom).st_size
-        tama = sizefile/12
-        t = round(tama)
-        ta = str(t)
+        num = sizefile/1024
+        num = round(num)
         data = "dummydata"
         while len(data):
             data = self.socket.recv(1024)
@@ -52,13 +59,19 @@ class ClientThread(threading.Thread):
         self.socket.sendall((str(cliente)+'-'+nom).encode())
         
         print ('Enviando INICIO ENVIO')
-        self.socket.sendall(("INICIOENVIO-"+ta).encode())
+        self.socket.sendall(("INICIOENVIO-"+str(sizefile)).encode())
         
-        print ('Enviando archivo')
+        
+        i=1;
         with open(nom, 'rb') as file:
             data = file.read(1024)
             self.socket.send(data)
-            while data != bytes(''.encode()):
+            #while data != bytes(''.encode()):
+            for i in range(num):
+                print('Enviando archivo'+str(i)+' de '+str(num))
+                i+=1
+                f.write(x+"-Sending data-Paquete "+str(i)+" de "+str(num))
+                f.write('')
                 data = file.read(1024)
                 self.socket.send(data)
         
