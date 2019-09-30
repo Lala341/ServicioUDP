@@ -66,7 +66,7 @@ try:
         print('receiving data...')
         if(j<1024):
             m=j
-        data = s.recv(m)
+        data = sock.recv(m)
         far.write(data)
         print('data=%s', (data))
         x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
@@ -76,6 +76,8 @@ try:
         j=j- 1024
     
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
+    message = 'RECIBIDO'
+    sock.sendall(message)
     f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B ")
     far.close()
      
