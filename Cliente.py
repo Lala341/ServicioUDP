@@ -40,7 +40,7 @@ try:
 
     message = 'LISTO'
     print (sys.stderr, 'enviando "%s"' % message)
-    sock.sendall(message)
+    sock.send(message)
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Enviado LISTO")
     temp= sock.recv(15)
@@ -81,7 +81,7 @@ try:
     segundos = tiempo.seconds
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     message = 'RECIBIDO'
-    sock.sendall(message)
+    sock.send(message)
     f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B .En "+segundos+" segundos")
     far.close()
      
@@ -106,10 +106,10 @@ finally:
         x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
         f.write(x+"-No se recibio correctamente el archivo.")
     print(sys.stderr, 'cerrando socket')
-    sock.close()
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Socket cerrado")
     f.close()
+sock.close()
 origin = repo.remote('origin')
 origin.pull()
 repo.git.add(u=True)
