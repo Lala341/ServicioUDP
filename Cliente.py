@@ -51,7 +51,6 @@ try:
     while True:
         data = sock.recv(11)
         if ("INICIOENVIO-" in data):
-            
             num= sock.recv(7)
             num=int(num)
             x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
@@ -61,6 +60,7 @@ try:
             
     j=num
     m=1024
+    instanteInicial = datetime.datetime.now()
     
     while 0<j:
         print('receiving data...')
@@ -74,11 +74,13 @@ try:
         datacontent=data
         hasher.update(data)
         j=j- 1024
-    
+    instanteFinal = datetime.datetime.now()
+    tiempo = instanteFinal - instanteInicial # Devuelve un objeto timedelta
+    segundos = tiempo.seconds
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     message = 'RECIBIDO'
     sock.sendall(message)
-    f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B ")
+    f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B .En "+segundos+" segundos")
     far.close()
      
     while True:
