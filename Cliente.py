@@ -16,7 +16,7 @@ import hashlib
 #Local repo on your computer
 repo = git.Repo( './' )
 x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
-nameFile="./Cliente/Logs/"+str(x.microsecond)+"--"+x+".txt"
+nameFile="./Cliente/Logs/"+"C-"+x+".txt"
 f= open(nameFile,"w+")
 
 
