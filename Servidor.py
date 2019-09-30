@@ -18,7 +18,7 @@ x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
 nameFile="./Servidor/Logs/"+"C-"+x+".txt"
 f= open(nameFile,"w+")
 
-print ('¿Qué archivo quiere transferir?')
+print ('¿Que archivo quiere transferir?')
 print ('1. Texto 100MB')
 print ('2. Imagen 250MB')
 archivo = int(input())
@@ -96,7 +96,7 @@ class ClientThread(threading.Thread):
             print (data)
 
         print ("Client disconnected...")
-        f.write(x+" Finaliza conexión con el cliente "+str(cliente)+'\n') 
+        f.write(x+" Finaliza conexion con el cliente "+str(cliente)+'\n') 
 
 host = "0.0.0.0"
 port = 1420
