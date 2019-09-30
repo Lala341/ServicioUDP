@@ -40,11 +40,12 @@ try:
 
     message = 'LISTO'
     print (sys.stderr, 'enviando "%s"' % message)
-    sock.send(message)
+    sock.send(message.encode())
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Enviado LISTO")
     temp= sock.recv(15)
-    temp2=temp.split("-")
+    datadec=temp.decode()
+    temp2=datadec.split("-")
     nom=temp2[0]
     idc=temp2[1]
     nameFilear="./Cliente/Archivos/Cliente"+idc+"--"+x+"-"+nom
@@ -52,9 +53,10 @@ try:
     
     while True:
         data = sock.recv(11)
-        if ("INICIOENVIO-" in data):
+        datadec=data.decode()
+        if ("INICIOENVIO-" in datadec):
             num= sock.recv(7)
-            num=int(num)
+            num=int(num.decode())
             x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
             f.write(x+"-Inicio Envio"+num)
             print ('Recibiendo "%s"' % data)
@@ -69,6 +71,7 @@ try:
         if(j<1024):
             m=j
         data = sock.recv(m)
+        datadec=data.decode()
         far.write(data)
         print('data=%s', (data))
         x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
@@ -81,18 +84,20 @@ try:
     segundos = tiempo.seconds
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     message = 'RECIBIDO'
-    sock.send(message)
+    sock.send(message.encode())
     f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B .En "+segundos+" segundos")
     far.close()
      
     while True:
         data = sock.recv(4)
-        if ("HASH" in data):
+        datadec=data.decode()
+        if ("HASH" in datadec):
             
             hashfileserver= sock.recv(1024)
+            datadec=hashfileserver.decode()
             x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
-            f.write(x+"-Recibe hash de servidor : "+hashfileserver)
-            print ('Recibiendo "%s"' % data)
+            f.write(x+"-Recibe hash de servidor : "+datadec)
+            print ('Recibiendo "%s"' % datadec)
             break
 finally:
     hashfile=hasher.hexdigest()
