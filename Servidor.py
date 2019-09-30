@@ -40,11 +40,12 @@ class ClientThread(threading.Thread):
 
     def run(self):    
         print ("Connection from : "+ip+":"+str(port))
-        sizefile = os.stat(file).st_size
+        sizefile = os.stat(nom).st_size
         tama = sizefile/12
         t = round(tama)
-        self.socket.sendall(nom+cliente)
-        self.socket.sendall("INICIOENVIO-"+t)
+        ta = str(t)
+        self.socket.sendall(nom+str(cliente))
+        self.socket.sendall("INICIOENVIO-"+ta)
         self.socket.sendall(file)
         self.socket.sendall('HASH')
         self.socket.sendall(hashen)
@@ -59,7 +60,7 @@ class ClientThread(threading.Thread):
         print ("Client disconnected...")
 
 host = "0.0.0.0"
-port = 65080
+port = 1420
 
 tcpsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
