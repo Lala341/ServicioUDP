@@ -17,7 +17,7 @@ if archivo == 1:
     nom = 'test01.txt'
 else:
     file = open('test02.jpg','rb')
-    nom = 'test02.txt'
+    nom = 'test02.jpg'
     
 
 
@@ -44,11 +44,17 @@ class ClientThread(threading.Thread):
         tama = sizefile/12
         t = round(tama)
         ta = str(t)
-        self.socket.sendall(nom+str(cliente))
-        self.socket.sendall("INICIOENVIO-"+ta)
-        self.socket.sendall(file)
-        self.socket.sendall('HASH')
-        self.socket.sendall(hashen)
+        
+        self.socket.sendall((nom+str(cliente)).encode())
+        self.socket.sendall(("INICIOENVIO-"+ta).encode())
+        data = file.read(1024)
+        self.socket.send(data)
+        while data != bytes(''.encode()):
+            data = file.read(1024)
+            self.socket.send(data)
+        self.socket.send(file.read(1024))
+        self.socket.sendall(('HASH').encode())
+        self.socket.sendall((hashen).encode())
         
         data = "dummydata"
         
@@ -70,7 +76,7 @@ threads = []
 
 
 while True:
-    tcpsock.listen(4)
+    tcpsock.listen(20)
     print ("\nListening for incoming connections...")
     (clientsock, (ip, port)) = tcpsock.accept()
     newthread = ClientThread(ip, port, clientsock)
