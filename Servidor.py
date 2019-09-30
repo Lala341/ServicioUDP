@@ -7,7 +7,6 @@ Created on Sun Sep 29 15:46:01 2019
 """
 
 import socket
-import socket
 import sys
 import git
 import datetime
