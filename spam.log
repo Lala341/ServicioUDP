@@ -1,0 +1,10 @@
+2019-09-29 18:59:43,810 - server_logger - INFO - creating an instance of auxiliary_module.Auxiliary
+2019-09-29 18:59:43,810 - server_logger.auxiliary.Auxiliary - INFO - creating an instance of Auxiliary
+2019-09-29 18:59:43,812 - server_logger - INFO - created an instance of auxiliary_module.Auxiliary
+2019-09-29 18:59:43,813 - server_logger - INFO - calling auxiliary_module.Auxiliary.do_something
+2019-09-29 18:59:43,815 - server_logger.auxiliary.Auxiliary - INFO - doing something
+2019-09-29 18:59:43,816 - server_logger.auxiliary.Auxiliary - INFO - done doing something
+2019-09-29 18:59:43,817 - server_logger - INFO - finished auxiliary_module.Auxiliary.do_something
+2019-09-29 18:59:43,818 - server_logger - INFO - calling auxiliary_module.some_function()
+2019-09-29 18:59:43,820 - server_logger - INFO - received a call to "some_function"
+2019-09-29 18:59:43,822 - server_logger - INFO - done with auxiliary_module.some_function()
