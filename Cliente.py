@@ -52,7 +52,7 @@ try:
         data = sock.recv(12)
         datadec=data.decode()
         if ("INICIOENVIO-" in datadec):
-            num= sock.recv(7).decode()
+            num= sock.recv(5).decode()
             print ('Recibiendo ' +num)
             
             num=int(num)
