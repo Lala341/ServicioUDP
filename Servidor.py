@@ -18,7 +18,7 @@ x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
 nameFile="./Servidor/Logs/"+"C-"+x+".txt"
 f= open(nameFile,"w+")
 
-print ('¿Que archivo quiere transferir?')
+print ('que archivo quiere transferir?')
 print ('1. Texto 100MB')
 print ('2. Imagen 250MB')
 archivo = int(input())
