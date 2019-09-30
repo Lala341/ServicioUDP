@@ -51,7 +51,7 @@ class ClientThread(threading.Thread):
 
     def run(self):    
         print ("Connection from : "+ip+":"+str(port)+' '+str(cliente))
-        sizefile = (os.stat(nom).st_size)/1000000
+        sizefile = (os.stat(nom).st_size)*1000000
         print (str(sizefile))
         num = sizefile/1024
         num = round(num)
