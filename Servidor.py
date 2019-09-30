@@ -1,12 +1,90 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
+      
+import socket, threading
+import os
+import hashlib
+
+print ('¿Qué archivo quiere transferir?')
+print ('1. Foto 100MB')
+print ('2. Video 250MB')
+archivo = int(input())
+cliente = 1;
+nom = 'test01.txt';
+if archivo == 1:
+    file = open('/test01.txt','rb')
+    nom = 'test01.txt'
+else:
+    file = open('/test02.jpg','rb')
+    nom = 'test02.txt'
+    
+file = open('/test01.txt');
+
+hasher = hashlib.md5()
+
+with file as afile:
+    buf = afile.read()
+    hasher.update(buf)
+    hashen = hasher.hexdigest()
+
+class ClientThread(threading.Thread):
+
+    def __init__(self,ip,port, socket):
+        threading.Thread.__init__(self)
+        self.ip = ip
+        self.port = port
+        self.socket = socket
+        print ("[+] New thread started for "+ip+":"+str(port))
+
+
+    def run(self):    
+        print ("Connection from : "+ip+":"+str(port))
+        sizefile = os.stat(file).st_size
+        tama = sizefile/12
+        t = round(tama)
+        self.socket.sendall(nom+cliente)
+        self.socket.sendall("INICIOENVIO-"+t)
+        self.socket.sendall(file)
+        self.socket.sendall('HASH')
+        self.socket.sendall(hashen)
+        
+        data = "dummydata"
+        
+        while len(data):
+            data = self.socket.recv(1024)
+            print ("Client sent : "+data)
+            self.socket.sendall("You sent me : "+data)
+
+        print ("Client disconnected...")
+
+host = "0.0.0.0"
+port = 65080
+
+tcpsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+tcpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+tcpsock.bind((host,port))
+threads = []
+
+
+while True:
+    tcpsock.listen(4)
+    print ("\nListening for incoming connections...")
+    (clientsock, (ip, port)) = tcpsock.accept()
+    newthread = ClientThread(ip, port, clientsock)
+    newthread.start()
+    cliente += 1;
+    threads.append(newthread)
+
+for t in threads:
+    t.join()
+    
+    """
 Created on Sun Sep 29 15:46:01 2019
 
-@author: laura
-"""
+@author: Juan
 
-import socket
+
 import socket
 import sys
 import git
@@ -19,12 +97,14 @@ host = socket.gethostname()     # Get local machine name
 s.bind((host, port))            # Bind to the port
 s.listen(2) 
 
-repoLocal = git.Repo( '/' )
+repoLocal = git.Repo( './' )
 x = datetime.datetime.now()
 nameFile="/Servidor/Logs/"+x+".txt"
 f= open(nameFile,"w+")                    # Now wait for client connection.
 
 print ('Server listening....')
+
+
 
 while True:
     conn, addr = s.accept()     # Establish connection with client.
@@ -47,3 +127,86 @@ while True:
     print('Done sending')
     conn.send('Thank you for connecting')
     conn.close()
+    
+import socket
+import sys
+
+# Create a TCP/IP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# Bind the socket to the port
+server_address = ('localhost', 15010)
+print (sys.stderr, 'starting up on %s port %s' % server_address)
+sock.bind(server_address)
+# Listen for incoming connections
+sock.listen(1)
+
+#Logs
+import logging
+
+
+
+# create logger
+module_logger = logging.getLogger('server_logger')
+
+class Auxiliary:
+    def __init__(self):
+        self.logger = logging.getLogger('server_logger.auxiliary.Auxiliary')
+        self.logger.info('creating an instance of Auxiliary')
+
+    def do_something(self):
+        self.logger.info('doing something')
+        a = 1 + 1
+        self.logger.info('done doing something')
+
+def some_function():
+    module_logger.info('received a call to "some_function"')
+
+# create logger with 'server-log'
+logger = logging.getLogger('server_logger')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler('server.log')
+fh.setLevel(logging.DEBUG)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(fh)
+logger.addHandler(ch)
+
+logger.info('creating an instance of auxiliary_module.Auxiliary')
+a = Auxiliary()
+logger.info('created an instance of auxiliary_module.Auxiliary')
+logger.info('calling auxiliary_module.Auxiliary.do_something')
+a.do_something()
+logger.info('finished auxiliary_module.Auxiliary.do_something')
+logger.info('calling auxiliary_module.some_function()')
+some_function()
+logger.info('done with auxiliary_module.some_function()')
+#FINLOG
+
+while True:
+    # Wait for a connection
+    print (sys.stderr, 'waiting for a connection')
+    connection, client_address = sock.accept()
+    try:
+        print (sys.stderr, 'connection from', client_address)
+
+        # Receive the data in small chunks and retransmit it
+        while True:
+            data = connection.recv(16)
+            print (sys.stderr, 'received "%s"' % data)
+            if data:
+                print (sys.stderr, 'sending data back to the client')
+                connection.sendall(data)
+            else:
+                print (sys.stderr, 'no more data from', client_address)
+                break
+            
+    finally:
+        # Clean up the connection
+        connection.close()"""
