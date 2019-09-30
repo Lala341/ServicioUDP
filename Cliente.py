@@ -57,7 +57,7 @@ try:
             
             num=int(num)
             x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
-            f.write(x+"-Inicio Envio"+num)
+            f.write(x+"-Inicio Envio"+str(num))
             print ('Recibiendo "%s"' % data)
             break
             
@@ -71,10 +71,10 @@ try:
             m=j
         data = sock.recv(m)
         datadec=data.decode()
-        far.write(data)
+        far.write(datadec)
         print('data=%s', (data))
         x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
-        f.write(x+"-Receiving data-Paquete "+i+" de "+num)
+        f.write(x+"-Receiving data-Paquete "+str(j)+" de "+str(num))
         datacontent=data
         hasher.update(data)
         j=j- 1024
@@ -84,7 +84,7 @@ try:
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     message = 'RECIBIDO'
     sock.send(message.encode())
-    f.write(x+"-Se recibio archivo de  "+len(datacontent)+" B .En "+segundos+" segundos")
+    f.write(x+"-Se recibio archivo de  "+str(len(datacontent))+" B .En "+str(segundos)+" segundos")
     far.close()
      
     while True:
