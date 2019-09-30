@@ -42,11 +42,12 @@ class ClientThread(threading.Thread):
         self.port = port
         self.socket = socket
         print ("[+] New thread started for "+ip+":"+str(port))
-        f.write(x+"-Cliente conectado puerto: "+str(port)+' Con ip: '+ip+' Con ID: '+str(cliente))
+        f.write(x+"-Cliente conectado puerto: "+str(port)+' Con ip: '+ip+' Con ID: '+str(cliente)+'\n')
 
     def run(self):    
         print ("Connection from : "+ip+":"+str(port)+' '+str(cliente))
-        sizefile = os.stat(nom).st_size
+        sizefile = (os.stat(nom).st_size)
+        print (str(sizefile))
         num = sizefile/1024
         num = round(num)
         data = "dummydata"
@@ -62,23 +63,26 @@ class ClientThread(threading.Thread):
         self.socket.sendall(("INICIOENVIO-"+str(sizefile)).encode())
         
         
-        i=1;
+        contador=1;
         with open(nom, 'rb') as file:
             data = file.read(1024)
             self.socket.send(data)
             #while data != bytes(''.encode()):
             for i in range(num):
-                print('Enviando archivo'+str(i)+' de '+str(num))
-                i+=1
-                f.write(x+"-Sending data-Paquete "+str(i)+" de "+str(num))
+                print('Enviando archivo '+str(contador)+' de '+str(num))
+                contador+=1
+                f.write(x+"-Sending data-Paquete "+str(contador)+" de "+str(num)+'\n') 
                 f.write('')
                 data = file.read(1024)
                 self.socket.send(data)
         
         print ('Enviando palabra HASH')
+        f.write(x+"-Enviando palabra HASH "+'\n') 
         self.socket.sendall(('HASH').encode())
         
         print('Enviando HASH')
+        hola = str(hasher)
+        f.write(x+"-Enviando HASH: "+hola+'\n') 
         self.socket.sendall((hashen).encode())
         print(hasher)
         
@@ -87,6 +91,7 @@ class ClientThread(threading.Thread):
             print (data)
 
         print ("Client disconnected...")
+        f.write(x+"Finaliza conexión con el cliente"+str(cliente)+'\n') 
 
 host = "0.0.0.0"
 port = 1420
