@@ -45,10 +45,7 @@ try:
     f.write(x+"-Enviado LISTO")
     temp= sock.recv(15)
     datadec=temp.decode()
-    temp2=datadec.split("-")
-    nom=temp2[0]
-    idc=temp2[1]
-    nameFilear="./Cliente/Archivos/Cliente"+idc+"--"+x+"-"+nom
+    nameFilear="./Cliente/Archivos/Cliente-"+x+"--"+datadec
     far= open(nameFilear,"w+")
     
     while True:
