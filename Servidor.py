@@ -44,8 +44,7 @@ class ClientThread(threading.Thread):
         tama = sizefile/12
         t = round(tama)
         ta = str(t)
-        
-        self.socket.sendall((nom+str(cliente)).encode())
+        self.socket.sendall((str(cliente)+'-'+nom).encode())
         self.socket.sendall(("INICIOENVIO-"+ta).encode())
         data = file.read(1024)
         self.socket.send(data)
