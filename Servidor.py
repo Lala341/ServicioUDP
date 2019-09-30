@@ -46,11 +46,11 @@ class ClientThread(threading.Thread):
 
     def run(self):    
         print ("Connection from : "+ip+":"+str(port)+' '+str(cliente))
-        sizefile = (os.stat(nom).st_size)
+        sizefile = (os.stat(nom).st_size)/1000000
         print (str(sizefile))
         num = sizefile/1024
         num = round(num)
-        data = "dummydata"
+        data = "hola"
         while len(data):
             data = self.socket.recv(1024)
             print (data)
@@ -91,7 +91,7 @@ class ClientThread(threading.Thread):
             print (data)
 
         print ("Client disconnected...")
-        f.write(x+"Finaliza conexión con el cliente"+str(cliente)+'\n') 
+        f.write(x+" Finaliza conexión con el cliente "+str(cliente)+'\n') 
 
 host = "0.0.0.0"
 port = 1420
