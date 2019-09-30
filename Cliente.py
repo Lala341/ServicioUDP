@@ -106,6 +106,6 @@ finally:
     f.close()
 origin = repo.remote('origin')
 origin.pull()
-repo.git.add(".")
+repo.git.add(u=True)
 repo.git.commit(m='Adding logs via python')
 origin.push()
