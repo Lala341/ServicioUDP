@@ -13,17 +13,15 @@ cliente = 1;
 nom = 'test01.txt';
 
 if archivo == 1:
-    file = open('test01.txt','rb')
     nom = 'test01.txt'
 else:
-    file = open('test02.jpg','rb')
     nom = 'test02.jpg'
     
 
 
 hasher = hashlib.md5()
 
-with file as afile:
+with open(nom, 'rb') as afile:
     buf = afile.read()
     hasher.update(buf)
     hashen = hasher.hexdigest()
@@ -39,28 +37,40 @@ class ClientThread(threading.Thread):
 
 
     def run(self):    
-        print ("Connection from : "+ip+":"+str(port))
+        print ("Connection from : "+ip+":"+str(port)+str(cliente))
         sizefile = os.stat(nom).st_size
         tama = sizefile/12
         t = round(tama)
         ta = str(t)
+        data = "dummydata"
+        while len(data):
+            data = self.socket.recv(1024)
+            print (data)
+            break
+        
+        print ('Enviando ID+Nombre del Archivo')
         self.socket.sendall((str(cliente)+'-'+nom).encode())
+        
+        print ('Enviando INICIO ENVIO')
         self.socket.sendall(("INICIOENVIO-"+ta).encode())
-        data = file.read(1024)
-        self.socket.send(data)
-        while data != bytes(''.encode()):
+        
+        print ('Enviando archivo')
+        with open(nom, 'rb') as file:
             data = file.read(1024)
             self.socket.send(data)
-        self.socket.send(file.read(1024))
-        self.socket.sendall(('HASH').encode())
-        self.socket.sendall((hashen).encode())
+            while data != bytes(''.encode()):
+                data = file.read(1024)
+                self.socket.send(data)
         
-        data = "dummydata"
+        print ('Enviando palabra HASH')
+        self.socket.sendall(('HASH').encode())
+        
+        print('Enviando HASH')
+        self.socket.sendall((hashen).encode())
         
         while len(data):
             data = self.socket.recv(1024)
-            print ("Client sent : "+data)
-            self.socket.sendall("You sent me : "+data)
+            print (data)
 
         print ("Client disconnected...")
 
