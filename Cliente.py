@@ -14,7 +14,7 @@ import hashlib
 
 
 #Local repo on your computer
-repoLocal = git.Repo( './' )
+repo = git.Repo( './' )
 x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
 nameFile="./Cliente/Logs/"+x+".txt"
 f= open(nameFile,"w+")
@@ -104,8 +104,8 @@ finally:
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Socket cerrado")
     f.close()
-    repo.git.add(".")
-    repo.git.commit(m='Adding logs via python')
-    origin = repo.remote('origin')
-    origin.pull()
-    origin.push()
+origin = repo.remote('origin')
+origin.pull()
+repo.git.add(".")
+repo.git.commit(m='Adding logs via python')
+origin.push()
