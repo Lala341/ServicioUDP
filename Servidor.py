@@ -19,8 +19,8 @@ nameFile="./Servidor/Logs/"+"C-"+x+".txt"
 f= open(nameFile,"w+")
 
 print ('¿Qué archivo quiere transferir?')
-print ('1. Foto 100MB')
-print ('2. Video 250MB')
+print ('1. Texto 100MB')
+print ('2. Imagen 250MB')
 archivo = int(input())
 cliente = 1;
 nom = 'test01.txt';
@@ -28,7 +28,7 @@ nom = 'test01.txt';
 if archivo == 1:
     nom = 'test01.txt'
 else:
-    nom = 'test02.jpg'
+    nom = 'test02.png'
     
 
 
@@ -51,7 +51,7 @@ class ClientThread(threading.Thread):
 
     def run(self):    
         print ("Connection from : "+ip+":"+str(port)+' '+str(cliente))
-        sizefile = (os.stat(nom).st_size)*1000000
+        sizefile = (os.stat(nom).st_size)
         print (str(sizefile))
         num = sizefile/1024
         num = round(num)
@@ -109,7 +109,7 @@ threads = []
 
 
 while True:
-    tcpsock.listen(20)
+    tcpsock.listen(25)
     print ("\nListening for incoming connections...")
     (clientsock, (ip, port)) = tcpsock.accept()
     newthread = ClientThread(ip, port, clientsock)
