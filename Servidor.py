@@ -11,14 +11,15 @@ print ('2. Video 250MB')
 archivo = int(input())
 cliente = 1;
 nom = 'test01.txt';
+
 if archivo == 1:
-    file = open('/test01.txt','rb')
+    file = open('test01.txt','rb')
     nom = 'test01.txt'
 else:
-    file = open('/test02.jpg','rb')
+    file = open('test02.jpg','rb')
     nom = 'test02.txt'
     
-file = open('/test01.txt');
+
 
 hasher = hashlib.md5()
 
