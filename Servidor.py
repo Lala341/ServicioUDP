@@ -67,6 +67,7 @@ class ClientThread(threading.Thread):
         
         print('Enviando HASH')
         self.socket.sendall((hashen).encode())
+        print(hasher)
         
         while len(data):
             data = self.socket.recv(1024)
