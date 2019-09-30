@@ -43,7 +43,7 @@ try:
     sock.send(message.encode())
     x = datetime.datetime.now().strftime("%m-%d-%Y-%H:%M:%S")
     f.write(x+"-Enviado LISTO")
-    temp= sock.recv(15)
+    temp= sock.recv(12)
     datadec=temp.decode()
     nameFilear="./Cliente/Archivos/Cliente-"+x+"--"+datadec
     far= open(nameFilear,"w+")
