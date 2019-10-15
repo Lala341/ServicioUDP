@@ -1,1 +1,0 @@
-09-29-2019-23:00:38-Cliente conectado puerto09-29-2019-23:00:38-Enviado LISTO09-29-2019-23:00:38-Este es el hash calculado por el cliente: d41d8cd98f00b204e9800998ecf8427e09-29-2019-23:00:38-No se recibio correctamente el archivo.09-29-2019-23:00:38-Socket cerrado
