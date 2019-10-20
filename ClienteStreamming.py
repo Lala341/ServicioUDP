@@ -1,8 +1,11 @@
 import pickle
 import socket
 import struct
-
+import numpy
 import cv2
+from datetime import date
+from datetime import datetime
+import time
 
 MCAST_GRP = "224.0.0.1"
 MCAST_PORT = 10000
@@ -24,18 +27,45 @@ sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((MCAST_GRP, MCAST_PORT))
+run=False
 
-s=""
+#Día actual
+now = datetime.now()
+now=str(now).replace("/","-")
+frame_width = 480
+frame_height = 640
 
+def nothing(x):
+    pass
+
+s= b''
+fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+
+out = cv2.VideoWriter('./Cliente/Streamming/test'+now+'.mp4', fourcc , 15.0, (640,480))
+run = True
 while True:
     print("I'm in while loop")
-    data, addr = sock.recvfrom(46080)
-    s+= data
-    if len(s) == (46080*20):
-        frame = numpy.fromstring (s, dtype=numpy.uint8)
-        frame = frame.reshape(480,640,3)
-        cv2.imshow("frame",frame)
+    if(run==True):
+        data, addr = sock.recvfrom(46080)
+        s+= data
+        if len(s) == (46080*20):
+            print("entre")
+            frame = numpy.fromstring (s, dtype=numpy.uint8)
+            frame = frame.reshape(480,640,3)
+            out.write(frame)
+            cv2.imshow("frame",frame)
 
-        s=""
+            s= b''
+        
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+        if cv2.waitKey(1) & 0xFF == ord('v'):
+            run= not run
+    if cv2.waitKey(1) & 0xFF == ord('v'):
+        run= not run
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+    
+out.release()
+cv2.release()
