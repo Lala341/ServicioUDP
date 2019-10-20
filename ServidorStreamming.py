@@ -9,6 +9,27 @@ import time
 
 MCAST_GRP = "224.0.0.1"
 MCAST_PORT = 10000
+MCAST_PORTS=[]
+MCAST_VIDEOS=[]
+print ('A continuacion definira que videos se añaden a la lista de emision')
+print (' Desea agregar el Canal Rita Ora Music- puerto 10000')
+print (' 1. Si')
+print (' 2. No')
+archivo = int(input())
+if archivo == 1:
+    MCAST_PORT = 10000
+    MCAST_PORTS.append(MCAST_PORT)
+    MCAST_VIDEOS.append("./test01.mp4")
+
+print ('2. Desea agregar el Canal CharliePuth Music- puerto 12000')
+print (' 1. Si')
+print (' 2. No')
+archivo = int(input())
+
+if archivo == 1:
+    MCAST_PORT = 12000
+    MCAST_PORTS.append(MCAST_PORT)
+    MCAST_VIDEOS.append("./test02.mp4")
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32)

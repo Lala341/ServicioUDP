@@ -11,6 +11,18 @@ MCAST_GRP = "224.0.0.1"
 MCAST_PORT = 10000
 IS_ALL_GROUPS = True
 
+print ('A que puerto se quiere conectar (Canal)?')
+print ('1. Canal Rita Ora Music-10000')
+print ('2. Canal CharliePuth Music-12000')
+archivo = int(input())
+
+if archivo == 1:
+    MCAST_PORT = 10000
+else:
+    MCAST_PORT = 12000
+    
+
+
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 if IS_ALL_GROUPS:
