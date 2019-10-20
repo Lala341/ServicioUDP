@@ -21,7 +21,10 @@ if archivo == 1:
 else:
     MCAST_PORT = 12000
     
-
+print ('Ingrese su usuario para autenticarse')
+user = int(input())
+print ('Ingrese su contraseña para autenticarse')
+contra = int(input())
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
