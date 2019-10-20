@@ -44,12 +44,11 @@ fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 out = cv2.VideoWriter('./Cliente/Streamming/test'+now+'.mp4', fourcc , 15.0, (640,480))
 run = True
 while True:
-    print("I'm in while loop")
     if(run==True):
         data, addr = sock.recvfrom(46080)
         s+= data
         if len(s) == (46080*20):
-            print("entre")
+            print("Recibiendo datos.")
             frame = numpy.fromstring (s, dtype=numpy.uint8)
             frame = frame.reshape(480,640,3)
             out.write(frame)
@@ -58,14 +57,18 @@ while True:
             s= b''
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
+            print("Cerrando streamming-STOP")
+    
             break
         if cv2.waitKey(1) & 0xFF == ord('v'):
+            print("Pausar streamming-PAUSE")
             run= not run
     if cv2.waitKey(1) & 0xFF == ord('v'):
+        print("Pausar streamming-PAUSE")
         run= not run
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        print("Cerrando streamming-STOP")
         break
 
     
 out.release()
-cv2.release()
