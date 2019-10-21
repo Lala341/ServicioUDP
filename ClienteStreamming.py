@@ -7,10 +7,12 @@ from datetime import date
 from datetime import datetime
 import time
 
+#Conexion multicast
 MCAST_GRP = "224.0.0.1"
 MCAST_PORT = 10000
 IS_ALL_GROUPS = True
 
+#Eleccion a que canal generar la conexion
 print ('A que puerto se quiere conectar (Canal)?')
 print ('1. Canal Rita Ora Music-10000')
 print ('2. Canal CharliePuth Music-12000')
@@ -20,12 +22,14 @@ if archivo == 1:
     MCAST_PORT = 10000
 else:
     MCAST_PORT = 12000
-    
+
+#Autenticacion 
 print ('Ingrese su usuario para autenticarse')
 user = (input())
 print ('Ingrese su contraseña para autenticarse')
 contra = (input())
 
+#Conexion multicast
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 if IS_ALL_GROUPS:
@@ -55,13 +59,14 @@ def nothing(x):
 
 s= b''
 fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-
+#Creacion del archivo para guardar el streamming enviado
 out = cv2.VideoWriter('./Cliente/Streamming/test'+now+'.mp4', fourcc , 15.0, (640,480))
 run = True
 while True:
     if(run==True):
         data, addr = sock.recvfrom(46080)
         s+= data
+        #Se reciben los datos solo si es del tamaño del frame (se envian por partes e 20)
         if len(s) == (46080*20):
             print("Recibiendo datos.")
             frame = numpy.fromstring (s, dtype=numpy.uint8)
@@ -70,11 +75,12 @@ while True:
             cv2.imshow("Canal",frame)
 
             s= b''
-        
+        #STOP streamming
         if cv2.waitKey(1) & 0xFF == ord('q'):
             print("Cerrando streamming-STOP")
     
             break
+        #PLAY streamming
         if cv2.waitKey(1) & 0xFF == ord('v'):
             print("Pausar streamming-PAUSE")
             run= not run
@@ -85,5 +91,5 @@ while True:
         print("Cerrando streamming-STOP")
         break
 
-    
+#Close streamming 
 out.release()
