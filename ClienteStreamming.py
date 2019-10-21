@@ -22,9 +22,9 @@ else:
     MCAST_PORT = 12000
     
 print ('Ingrese su usuario para autenticarse')
-user = int(input())
+user = (input())
 print ('Ingrese su contraseña para autenticarse')
-contra = int(input())
+contra = (input())
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -67,7 +67,7 @@ while True:
             frame = numpy.fromstring (s, dtype=numpy.uint8)
             frame = frame.reshape(480,640,3)
             out.write(frame)
-            cv2.imshow("frame",frame)
+            cv2.imshow("Canal",frame)
 
             s= b''
         
